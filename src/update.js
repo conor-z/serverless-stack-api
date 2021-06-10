@@ -23,8 +23,8 @@ export const main = handler(async (event, context) => {
     ReturnValues: "ALL_NEW",
   };
 
-  const result = await (await dynamoDb.update(params)).Attributes;
-  console.log(result);
+  const result = await (await dynamoDb.update(params));
+  const attr = result.Attributes;
 
-  return { status: true , result};
+  return { status: true , Attributes: attr};
 });
