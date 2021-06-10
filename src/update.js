@@ -7,7 +7,7 @@ export const main = handler(async (event, context) => {
     TableName: process.env.tableName,
     // 'Key' defines the partition key and sort key of the item to be updated
     Key: {
-      userId: "123", // The id of the author
+      userId: event.requestContext.identity.cognitoIdentityId, // The id of the author
       noteId: event.pathParameters.id, // The id of the note from the path
     },
     // 'UpdateExpression' defines the attributes to be updated
@@ -23,7 +23,8 @@ export const main = handler(async (event, context) => {
     ReturnValues: "ALL_NEW",
   };
 
-  await dynamoDb.update(params);
+  const result = await (await dynamoDb.update(params)).Attributes;
+  console.log(result);
 
-  return { status: true };
+  return { status: true , result};
 });
